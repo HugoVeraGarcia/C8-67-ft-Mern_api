@@ -5,6 +5,7 @@ const { AppError } = require('../utils/appError');
 
 // utils
 const { catchAsync } = require('../utils/catchAsync');
+const { Cart } = require('../models/cart.model');
 
 const getAllProducts = catchAsync(async (req, res, next) => {
   const products = await Product.findAll({

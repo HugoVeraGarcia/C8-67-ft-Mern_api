@@ -21,6 +21,7 @@ const {
   deleteAdmin,
   activateAdmin,
   createEnterprise,
+  getAllAdmin,
 } = require('../controllers/admin.controller');
 
 //router declaration
@@ -31,6 +32,8 @@ router.post('/', createUserValidations, checkValidations, createUserAdmin);
 
 // login admin
 router.post('/login', loginValidations, checkValidations, login);
+
+router.get('/', getAllAdmin);
 
 router.patch('/:id', activateAdmin);
 
