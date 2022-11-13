@@ -102,7 +102,7 @@ router.get('/user/:id', userEnterpriseExists, getUserEnterpriseById);
 router.delete('/:id', userEnterpriseExists, deleteUserEnterprise);
 
 // activate one user from one enterprise
-router.get('/active/:id', userDeletedEnterpriseExists, activeUserEnterprise);
+router.patch('/active/:id', userDeletedEnterpriseExists, activeUserEnterprise);
 
 // update one user from one enterprise
 router.patch(

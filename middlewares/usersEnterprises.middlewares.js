@@ -43,13 +43,9 @@ const protectTokenUserEnterprise = catchAsync(async (req, res, next) => {
 
 const userEnterpriseExists = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const idUserEnterprise = id.split('_');
-
-  const id_user = idUserEnterprise[0];
-  const id_enterprise = idUserEnterprise[1];
 
   const user = await userEnterprise.findOne({
-    where: { enterpriseId: id_enterprise, id: id_user, status: 'active' },
+    where: { id, status: 'active' },
     attributes: { exclude: ['password'] },
     include: { model: Enterprise },
   });
@@ -99,13 +95,9 @@ const enterpriseExists = catchAsync(async (req, res, next) => {
 
 const userDeletedEnterpriseExists = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const idUserEnterprise = id.split('_');
-
-  const id_user = idUserEnterprise[0];
-  const id_enterprise = idUserEnterprise[1];
 
   const user = await userEnterprise.findOne({
-    where: { enterpriseId: id_enterprise, id: id_user, status: 'deleted' },
+    where: { id, status: 'deleted' },
     attributes: { exclude: ['password'] },
     include: { model: Enterprise },
   });

@@ -30,7 +30,7 @@ const deleteUserEnterprise = catchAsync(async (req, res, next) => {
 // active one user from enterprise
 const activeUserEnterprise = catchAsync(async (req, res, next) => {
   const { user } = req;
-  console.log('user:::', user);
+  
   await user.update({
     status: 'active',
   });
