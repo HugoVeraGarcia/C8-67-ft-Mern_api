@@ -97,6 +97,7 @@ const deleteEnterprise = catchAsync(async (req, res, next) => {
 
 const activateEnterprise = catchAsync(async (req, res, next) => {
   const { enterprise } = req;
+  console.log(enterprise);
 
   await enterprise.update({ status: 'active' });
 

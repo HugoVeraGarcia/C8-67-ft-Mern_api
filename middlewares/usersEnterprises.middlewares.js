@@ -99,13 +99,9 @@ const enterpriseExists = catchAsync(async (req, res, next) => {
 
 const userDeletedEnterpriseExists = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const idUserEnterprise = id.split('_');
-
-  const id_user = idUserEnterprise[0];
-  const id_enterprise = idUserEnterprise[1];
-
+  console.log('id:::', id);
   const user = await userEnterprise.findOne({
-    where: { enterpriseId: id_enterprise, id: id_user, status: 'deleted' },
+    where: { id, status: 'deleted' },
     attributes: { exclude: ['password'] },
   });
 
@@ -123,7 +119,7 @@ const enterpriseDeletedExists = catchAsync(async (req, res, next) => {
 
   const enterprise = await Enterprise.findOne({
     where: { id, status: 'deleted' },
-    //attributes: { exclude: ['password'] },
+    attributes: { exclude: ['password'] },
   });
 
   if (!enterprise) {

@@ -13,7 +13,7 @@ const {
   userEnterpriseExistsUpdate,
 } = require('../middlewares/usersEnterprises.middlewares');
 //
-const { 
+const {
   createUserEnterpriseValidations,
   updateUserEnterpriseValidations,
   createEnterpriseValidations,
@@ -80,7 +80,11 @@ router.get('/enterprise/:id', enterpriseExists, getEnterpriseById);
 router.delete('/enterprise/:id', enterpriseExists, deleteEnterprise);
 
 // activated enterprise
-router.patch('/enterprise_active/:id', activateEnterprise);
+router.patch(
+  '/enterprise_active/:id',
+  enterpriseDeletedExists,
+  activateEnterprise
+);
 
 //update enterprise
 router.patch(
