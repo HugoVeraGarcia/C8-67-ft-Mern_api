@@ -13,7 +13,7 @@ const {
   userEnterpriseExistsUpdate,
 } = require('../middlewares/usersEnterprises.middlewares');
 //
-const {
+const { 
   createUserEnterpriseValidations,
   updateUserEnterpriseValidations,
   createEnterpriseValidations,
