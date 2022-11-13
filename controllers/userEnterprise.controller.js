@@ -30,6 +30,7 @@ const deleteUserEnterprise = catchAsync(async (req, res, next) => {
 // active one user from enterprise
 const activeUserEnterprise = catchAsync(async (req, res, next) => {
   const { user } = req;
+  console.log('user:::', user);
   await user.update({
     status: 'active',
   });
@@ -63,7 +64,7 @@ const getAllUsersEnterpriseById = catchAsync(async (req, res, next) => {
   const users = await userEnterprise.findAll({
     where: { enterpriseId: id, status: 'active' },
     attributes: { exclude: ['password'] },
-    include: { model: Enterprise },
+    include: { model: Enterprise, attributes: { exclude: ['password'] } },
   });
 
   res.status(200).json({ users });
