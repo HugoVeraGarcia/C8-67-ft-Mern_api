@@ -41,6 +41,6 @@ router.get('/', getAllAdmin);
 router.patch('/:id', activateAdmin);
 
 // delete admin
-router.delete('/:id').delete(adminExists, deleteAdmin);
+router.delete('/:id', adminExists, deleteAdmin);
 
 module.exports = { adminRouter: router };
