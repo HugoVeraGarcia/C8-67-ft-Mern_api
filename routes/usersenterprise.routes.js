@@ -11,7 +11,7 @@ const {
   //protectEmployee,
   protectAccountOwner,
   userEnterpriseExistsUpdate,
-} = require('../middlewares/usersenterprises.middlewares');
+} = require('../middlewares/usersEnterprises.middlewares');
 //
 const {
   createUserEnterpriseValidations,

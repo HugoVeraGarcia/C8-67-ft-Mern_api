@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { userEnterprise } = require('../models/userenterprise.model');
+const { userEnterprise } = require('../models/userentErprise.model');
 const { Enterprise } = require('../models/enterprise.model');
 
 // Utils
