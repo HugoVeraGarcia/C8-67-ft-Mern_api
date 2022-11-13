@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 
 const { AppError } = require('../utils/appError');
 
-const { userEnterprise } = require('../models/userenterprise.model');
+const { userEnterprise } = require('../models/userenterprise_.model');
 const { Enterprise } = require('../models/enterprise.model');
 const { Product } = require('../models/product.model');
 const { Order } = require('../models/order.model');
