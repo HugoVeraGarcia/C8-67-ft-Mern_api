@@ -1,6 +1,8 @@
 const { DataTypes } = require('sequelize');
 const { db } = require('../utils/database');
 
+//
+
 const userEnterprise = db.define('userEnterprise', {
   id: {
     primaryKey: true,
