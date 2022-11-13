@@ -47,7 +47,7 @@ const userEnterpriseExists = catchAsync(async (req, res, next) => {
   const user = await userEnterprise.findOne({
     where: { id, status: 'active' },
     attributes: { exclude: ['password'] },
-    include: { model: Enterprise },
+    //include: { model: Enterprise },
   });
 
   if (!user) {
