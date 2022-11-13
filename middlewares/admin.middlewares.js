@@ -32,7 +32,7 @@ const protectTokenAdmin = catchAsync(async (req, res, next) => {
 
   if (!user) {
     return next(
-      new AppError('The owner of this token is no longer availablexxx', 403)
+      new AppError('The owner of this token is no longer available', 403)
     );
   }
 

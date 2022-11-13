@@ -11,7 +11,6 @@ const {
   createUserValidations,
   checkValidations,
   loginValidations,
-  createEnterpriseValidations,
 } = require('../middlewares/validations.middlewares');
 
 //import controller functions
@@ -20,7 +19,6 @@ const {
   login,
   deleteAdmin,
   activateAdmin,
-  createEnterprise,
   getAllAdmin,
 } = require('../controllers/admin.controller');
 
@@ -33,20 +31,14 @@ router.post('/', createUserValidations, checkValidations, createUserAdmin);
 // login admin
 router.post('/login', loginValidations, checkValidations, login);
 
-router.get('/', getAllAdmin);
-
-router.patch('/:id', activateAdmin);
-
 // Apply protectToken middleware
 router.use(protectTokenAdmin);
 
-//create enterprise
-router.post(
-  '/enterprise',
-  createEnterpriseValidations,
-  checkValidations,
-  createEnterprise
-);
+// get all superusers admin
+router.get('/', getAllAdmin);
+
+// activate admin
+router.patch('/:id', activateAdmin);
 
 // delete admin
 router.route('/:id').delete(adminExists, deleteAdmin);

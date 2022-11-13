@@ -50,20 +50,6 @@ const createUserAdmin = catchAsync(async (req, res, next) => {
   });
 });
 
-const createEnterprise = catchAsync(async (req, res, next) => {
-  const { enterprisename } = req.body;
-
-  const enterprise = await Enterprise.create({
-    enterprisename,
-  });
-
-  res.status(201).json({
-    status: 'Success',
-    message: 'Enterprise has been created',
-    enterprise,
-  });
-});
-
 const updateAdmin = catchAsync(async (req, res, next) => {
   const { user } = req;
   const { username, email } = req.body;
@@ -184,11 +170,12 @@ const getOrderById = catchAsync(async (req, res, next) => {
 
 const getAllAdmin = catchAsync(async (req, res, next) => {
   const user = await Admin.findAll({
-    where: {},
+    where: { status: 'active' },
+    attributes: { exclude: ['password'] },
   });
-  res.status(200).json({
-    user,
-  });
+
+  console.log(user);
+  res.status(200).json({ user });
 });
 
 module.exports = {
@@ -203,6 +190,5 @@ module.exports = {
   login,
   deleteAdmin,
   activateAdmin,
-  createEnterprise,
   getAllAdmin,
 };

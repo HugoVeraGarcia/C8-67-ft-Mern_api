@@ -4,6 +4,57 @@ const createEnterpriseValidations = [
   body('enterprisename')
     .notEmpty()
     .withMessage('Enterprise name cannot be empty'),
+  body('foodtype').notEmpty().withMessage('foodtype cannot be empty'),
+  body('country').notEmpty().withMessage('country cannot be empty'),
+  body('prefphone').notEmpty().withMessage('prefix number cannot be empty'),
+  body('phone').notEmpty().withMessage('phone cannot be empty'),
+  body('address').notEmpty().withMessage('address cannot be empty'),
+  body('typeperson').notEmpty().withMessage('typeperson cannot be empty'),
+  body('enterpriserfc').notEmpty().withMessage('enterpriserfc cannot be empty'),
+  body('legalreprename')
+    .notEmpty()
+    .withMessage('legalreprename cannot be empty'),
+  body('legalreprelastname')
+    .notEmpty()
+    .withMessage('legalreprelastname cannot be empty'),
+  body('reprerfc').notEmpty().withMessage('reprerfc cannot be empty'),
+  body('identityrepre').notEmpty().withMessage('identityrepre cannot be empty'),
+  body('email')
+    .notEmpty()
+    .withMessage('email cannot be empty')
+    .isEmail()
+    .withMessage('Must be a valid email'),
+  body('password')
+    .notEmpty()
+    .withMessage('password cannot be empty')
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters long'),
+];
+
+const updateEnterpriseValidations = [
+  body('enterprisename')
+    .notEmpty()
+    .withMessage('Enterprise name cannot be empty'),
+  body('foodtype').notEmpty().withMessage('foodtype cannot be empty'),
+  body('country').notEmpty().withMessage('country cannot be empty'),
+  body('prefphone').notEmpty().withMessage('prefix number cannot be empty'),
+  body('phone').notEmpty().withMessage('phone cannot be empty'),
+  body('address').notEmpty().withMessage('address cannot be empty'),
+  body('typeperson').notEmpty().withMessage('typeperson cannot be empty'),
+  body('enterpriserfc').notEmpty().withMessage('enterpriserfc cannot be empty'),
+  body('legalreprename')
+    .notEmpty()
+    .withMessage('legalreprename cannot be empty'),
+  body('legalreprelastname')
+    .notEmpty()
+    .withMessage('legalreprelastname cannot be empty'),
+  body('reprerfc').notEmpty().withMessage('reprerfc cannot be empty'),
+  body('identityrepre').notEmpty().withMessage('identityrepre cannot be empty'),
+  body('email')
+    .notEmpty()
+    .withMessage('email cannot be empty')
+    .isEmail()
+    .withMessage('Must be a valid email'),
 ];
 
 const createUserValidations = [
@@ -32,6 +83,17 @@ const createUserEnterpriseValidations = [
     .withMessage('Password cannot be empty')
     .isLength({ min: 8 })
     .withMessage('Password must be at least 8 characters long'),
+  body('enterpriseId').notEmpty().withMessage('Enterprise id cannot be empty'),
+];
+
+const updateUserEnterpriseValidations = [
+  body('username').notEmpty().withMessage('Username cannot be empty'),
+  body('email')
+    .notEmpty()
+    .withMessage('Email cannot be empty')
+    .isEmail()
+    .withMessage('Must be a valid email'),
+  //body('enterpriseId').notEmpty().withMessage('Enterprise id cannot be empty'),
 ];
 
 const loginValidations = [
@@ -92,4 +154,6 @@ module.exports = {
   checkValidations,
   loginValidations,
   createEnterpriseValidations,
+  updateEnterpriseValidations,
+  updateUserEnterpriseValidations,
 };

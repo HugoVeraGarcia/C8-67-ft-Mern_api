@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 const { userEnterprise } = require('../models/userEnterprise.model');
+const { Enterprise } = require('../models/enterprise.model');
 
 // Utils
 const { catchAsync } = require('../utils/catchAsync');
 const { AppError } = require('../utils/appError');
 
-const protectToken = catchAsync(async (req, res, next) => {
+const protectTokenUserEnterprise = catchAsync(async (req, res, next) => {
   let token;
 
   // Extract token from headers
@@ -42,10 +43,15 @@ const protectToken = catchAsync(async (req, res, next) => {
 
 const userEnterpriseExists = catchAsync(async (req, res, next) => {
   const { id } = req.params;
+  const idUserEnterprise = id.split('_');
+
+  const id_user = idUserEnterprise[0];
+  const id_enterprise = idUserEnterprise[1];
 
   const user = await userEnterprise.findOne({
-    where: { id, status: 'active' },
-    //attributes: { exclude: ['password'] },
+    where: { enterpriseId: id_enterprise, id: id_user, status: 'active' },
+    attributes: { exclude: ['password'] },
+    include: { model: Enterprise },
   });
 
   if (!user) {
@@ -54,6 +60,78 @@ const userEnterpriseExists = catchAsync(async (req, res, next) => {
 
   // Add user data to the req object
   req.user = user;
+  next();
+});
+
+const userEnterpriseExistsUpdate = catchAsync(async (req, res, next) => {
+  const { id } = req.body;
+
+  const user = await userEnterprise.findOne({
+    where: { id, status: 'active' },
+    attributes: { exclude: ['password'] },
+  });
+
+  if (!user) {
+    return next(new AppError(`User not found given that id: ${id}`, 404));
+  }
+
+  // Add user data to the req object
+  req.user = user;
+  next();
+});
+
+const enterpriseExists = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  const enterprise = await Enterprise.findOne({
+    where: { id, status: 'active' },
+    //attributes: { exclude: ['password'] },
+  });
+
+  if (!enterprise) {
+    return next(new AppError(`User not found given that id: ${id}`, 404));
+  }
+
+  // Add user data to the req object
+  req.enterprise = enterprise;
+  next();
+});
+
+const userDeletedEnterpriseExists = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const idUserEnterprise = id.split('_');
+
+  const id_user = idUserEnterprise[0];
+  const id_enterprise = idUserEnterprise[1];
+
+  const user = await userEnterprise.findOne({
+    where: { enterpriseId: id_enterprise, id: id_user, status: 'deleted' },
+    attributes: { exclude: ['password'] },
+  });
+
+  if (!user) {
+    return next(new AppError(`User not found given that id: ${id}`, 404));
+  }
+
+  // Add user data to the req object
+  req.user = user;
+  next();
+});
+
+const enterpriseDeletedExists = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  const enterprise = await Enterprise.findOne({
+    where: { id, status: 'deleted' },
+    //attributes: { exclude: ['password'] },
+  });
+
+  if (!enterprise) {
+    return next(new AppError(`User not found given that id: ${id}`, 404));
+  }
+
+  // Add user data to the req object
+  req.enterprise = enterprise;
   next();
 });
 
@@ -73,6 +151,10 @@ const protectAccountOwner = catchAsync(async (req, res, next) => {
 
 module.exports = {
   userEnterpriseExists,
-  protectToken,
+  enterpriseExists,
+  protectTokenUserEnterprise,
   protectAccountOwner,
+  enterpriseDeletedExists,
+  userEnterpriseExistsUpdate,
+  userDeletedEnterpriseExists,
 };
