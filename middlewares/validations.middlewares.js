@@ -71,6 +71,21 @@ const createUserValidations = [
     .withMessage('Password must be at least 8 characters long'),
 ];
 
+const createAdminValidations = [
+  body('firstname').notEmpty().withMessage('First Name cannot be empty'),
+  body('lastname').notEmpty().withMessage('Last Name cannot be empty'),
+  body('email')
+    .notEmpty()
+    .withMessage('Email cannot be empty')
+    .isEmail()
+    .withMessage('Must be a valid email'),
+  body('password')
+    .notEmpty()
+    .withMessage('Password cannot be empty')
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters long'),
+];
+
 const createUserEnterpriseValidations = [
   body('username').notEmpty().withMessage('Username cannot be empty'),
   body('email')
@@ -87,13 +102,12 @@ const createUserEnterpriseValidations = [
 ];
 
 const updateUserEnterpriseValidations = [
-  body('username').notEmpty().withMessage('Username cannot be empty'),
+  body('username').notEmpty().withMessage('Username cannot be empt'),
   body('email')
     .notEmpty()
     .withMessage('Email cannot be empty')
     .isEmail()
     .withMessage('Must be a valid email'),
-  //body('enterpriseId').notEmpty().withMessage('Enterprise id cannot be empty'),
 ];
 
 const loginValidations = [
@@ -156,4 +170,5 @@ module.exports = {
   createEnterpriseValidations,
   updateEnterpriseValidations,
   updateUserEnterpriseValidations,
+  createAdminValidations,
 };

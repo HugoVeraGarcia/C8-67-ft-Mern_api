@@ -6,6 +6,29 @@ const { Enterprise } = require('../models/enterprise.model');
 const { catchAsync } = require('../utils/catchAsync');
 const { AppError } = require('../utils/appError');
 
+//isUserEnterpriseAdmin
+const isUserEnterpriseAdmin = catchAsync(async (req, res, next) => {
+  let token;
+
+  // Extract token from headers
+  // ['Bearer', 'token']
+  token = req.headers.authorization.split(' ')[1];
+
+  // Validate token
+  const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+
+  // decoded returns -> { id: 1, iat: 1651713776, exp: 1651717376 }
+  const userAdmin = await userEnterprise.findOne({
+    where: { id: decoded.id, status: 'active' },
+  });
+
+  if (userAdmin.role !== 'admin') {
+    return next(new AppError('User has not a admin role', 400));
+  }
+
+  next();
+});
+
 const protectTokenUserEnterprise = catchAsync(async (req, res, next) => {
   let token;
 
@@ -150,4 +173,5 @@ module.exports = {
   enterpriseDeletedExists,
   userEnterpriseExistsUpdate,
   userDeletedEnterpriseExists,
+  isUserEnterpriseAdmin,
 };

@@ -30,13 +30,15 @@ const getUserById = catchAsync(async (req, res, next) => {
 });
 
 const createUserAdmin = catchAsync(async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { firstname, lastname, phone, email, password } = req.body;
 
   const salt = await bcrypt.genSalt(12);
   const hashPassword = await bcrypt.hash(password, salt);
 
   const user = await Admin.create({
-    username,
+    firstname,
+    lastname,
+    phone,
     email,
     password: hashPassword,
   });
@@ -52,9 +54,9 @@ const createUserAdmin = catchAsync(async (req, res, next) => {
 
 const updateAdmin = catchAsync(async (req, res, next) => {
   const { user } = req;
-  const { username, email } = req.body;
+  const { firstname, lastname, phone, email } = req.body;
 
-  await user.update({ username, email });
+  await user.update({ firstname, lastname, phone, email });
   res.status(200).json({ status: 'success' });
 });
 
@@ -172,6 +174,7 @@ const getAllAdmin = catchAsync(async (req, res, next) => {
   const user = await Admin.findAll({
     where: { status: 'active' },
     attributes: { exclude: ['password'] },
+    order: [["id", "asc"]]
   });
 
   console.log(user);

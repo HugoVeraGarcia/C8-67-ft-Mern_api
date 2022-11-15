@@ -9,6 +9,7 @@ const {
 
 const {
   createUserValidations,
+  createAdminValidations,
   checkValidations,
   loginValidations,
 } = require('../middlewares/validations.middlewares');
@@ -26,7 +27,7 @@ const {
 const router = express.Router();
 
 //create admin
-router.post('/', createUserValidations, checkValidations, createUserAdmin);
+router.post('/', createAdminValidations, checkValidations, createUserAdmin);
 
 // login admin
 router.post('/login', loginValidations, checkValidations, login);

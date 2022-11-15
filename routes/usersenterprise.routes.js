@@ -11,6 +11,7 @@ const {
   //protectEmployee,
   protectAccountOwner,
   userEnterpriseExistsUpdate,
+  isUserEnterpriseAdmin,
 } = require('../middlewares/usersEnterprises.middlewares');
 //
 const {
@@ -29,6 +30,7 @@ const {
   deleteUserEnterprise,
   activeUserEnterprise,
   login,
+  getIdEnterpriseByUser,
   createEnterprise,
   getAllEnterprise,
   getEnterpriseById,
@@ -42,16 +44,14 @@ const {
 //router declaration
 const router = express.Router();
 
-// creater user enterprise
+// create user enterprise
 router.post(
   '/',
+  isUserEnterpriseAdmin,
   createUserEnterpriseValidations,
   checkValidations,
   createUserEnterprise
 );
-
-// login user enterprise
-router.post('/login', loginValidations, checkValidations, login);
 
 //create enterprise
 router.post(
@@ -60,6 +60,12 @@ router.post(
   checkValidations,
   createEnterprise
 );
+
+// login user enterprise
+router.post('/login', loginValidations, checkValidations, login);
+
+// get Id enterprise by user id
+router.get('/myEnterprise/:id', getIdEnterpriseByUser);
 
 // Apply protectToken middleware
 router.use(protectTokenUserEnterprise);
@@ -96,14 +102,25 @@ router.patch(
 router.get('/user/:id', userEnterpriseExists, getUserEnterpriseById);
 
 // delete one user from one enterprise
-router.delete('/:id', userEnterpriseExists, deleteUserEnterprise);
+router.delete(
+  '/:id',
+  isUserEnterpriseAdmin,
+  userEnterpriseExists,
+  deleteUserEnterprise
+);
 
 // activate one user from one enterprise
-router.patch('/active/:id', userDeletedEnterpriseExists, activeUserEnterprise);
+router.patch(
+  '/active/:id',
+  isUserEnterpriseAdmin,
+  userDeletedEnterpriseExists,
+  activeUserEnterprise
+);
 
 // update one user from one enterprise
 router.patch(
   '/',
+  isUserEnterpriseAdmin,
   updateUserEnterpriseValidations,
   userEnterpriseExistsUpdate,
   checkValidations,

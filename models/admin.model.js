@@ -8,9 +8,16 @@ const Admin = db.define('admin', {
     allowNull: false,
     type: DataTypes.INTEGER,
   },
-  username: {
+  firstname: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  lastname: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  phone: {
+    type: DataTypes.STRING,
   },
   email: {
     type: DataTypes.STRING,

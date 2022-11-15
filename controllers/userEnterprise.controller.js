@@ -30,7 +30,7 @@ const deleteUserEnterprise = catchAsync(async (req, res, next) => {
 // active one user from enterprise
 const activeUserEnterprise = catchAsync(async (req, res, next) => {
   const { user } = req;
-  
+
   await user.update({
     status: 'active',
   });
@@ -44,9 +44,24 @@ const getAllEnterprise = catchAsync(async (req, res, next) => {
   const enterprise = await Enterprise.findAll({
     where: { status: 'active' },
     attributes: { exclude: ['password'] },
+    order: [['id', 'Asc']],
   });
   res.status(200).json({
     enterprise,
+  });
+});
+
+const getIdEnterpriseByUser = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const user = await userEnterprise.findOne({
+    where: { status: 'active', id },
+    attributes: { exclude: ['password'] },
+    //order: [['id', 'Asc']],
+  });
+
+  const identerpriseid = user.enterpriseId;
+  res.status(200).json({
+    identerpriseid,
   });
 });
 
@@ -65,6 +80,7 @@ const getAllUsersEnterpriseById = catchAsync(async (req, res, next) => {
     where: { enterpriseId: id, status: 'active' },
     attributes: { exclude: ['password'] },
     include: { model: Enterprise, attributes: { exclude: ['password'] } },
+    order: [['id', 'Asc']],
   });
 
   res.status(200).json({ users });
@@ -141,11 +157,11 @@ const updateUserEnterprise = catchAsync(async (req, res, next) => {
 });
 
 const login = catchAsync(async (req, res, next) => {
-  const { email, password, enterpriseId } = req.body;
+  const { email, password } = req.body;
 
   // Validate that user exists with given email
   const user = await userEnterprise.findOne({
-    where: { email, enterpriseId, status: 'active' },
+    where: { email, status: 'active' },
   });
 
   // Compare password with db
@@ -319,6 +335,7 @@ module.exports = {
   deleteUserEnterprise,
   activeUserEnterprise,
   login,
+  getIdEnterpriseByUser,
   checkToken,
   getProducts,
   getAllOrders,
