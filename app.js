@@ -14,7 +14,7 @@ const { globalErrorHandler } = require('./controllers/errors.controller');
 const { adminRouter } = require('./routes/admin.routes');
 const { productsRouter } = require('./routes/products.routes');
 const { cartsRouter } = require('./routes/carts.routes');
-const {userEnterpriseRouter } = require('./routes/usersEnterprise.routes');
+const {userEnterpriseRouter } = require('./routes/usersenterprise.routes');
 
 const { db } = require('./utils/database');
 

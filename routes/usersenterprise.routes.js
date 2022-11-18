@@ -41,7 +41,7 @@ const {
   login,
   updateEnterprise,
   updateUserEnterprise,
-} = require('../controllers/userEnterprise.controller');
+} = require('../controllers/userenterprise.controller');
 
 //router declaration
 const router = express.Router();
