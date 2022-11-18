@@ -16,7 +16,7 @@ initModels();
 
 // Sync sequelize models
 db.sync() //{ force: true }
-  .then(() => console.log('---Database synced---'))
+  .then(() => console.log('-----Database synced-----'))
   .catch(err => console.log(err));
 
 //spin up server

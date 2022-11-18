@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
-const { Admin } = require('../models/admin.model');
+//const { Admin } = require('../models/admin.model');
 
 // Utils
 const { catchAsync } = require('../utils/catchAsync');
 const { AppError } = require('../utils/appError');
+const { userEnterprise } = require('../models/userEnterprise.model');
 
 const protectTokenAdmin = catchAsync(async (req, res, next) => {
   let token;
@@ -26,8 +27,8 @@ const protectTokenAdmin = catchAsync(async (req, res, next) => {
   console.log(decoded);
 
   // decoded returns -> { id: 1, iat: 1651713776, exp: 1651717376 }
-  const user = await Admin.findOne({
-    where: { id: decoded.id, status: 'active' },
+  const user = await userEnterprise.findOne({
+    where: { id: decoded.id, status: 'active', role: 'super' },
   });
 
   if (!user) {
@@ -37,23 +38,6 @@ const protectTokenAdmin = catchAsync(async (req, res, next) => {
   }
 
   req.sessionUser = user;
-  next();
-});
-
-const adminExists = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
-
-  const user = await Admin.findOne({
-    where: { id, status: 'active' },
-    //attributes: { exclude: ['password'] },
-  });
-
-  if (!user) {
-    return next(new AppError(`User not found given that id: ${id}`, 404));
-  }
-
-  // Add user data to the req object
-  req.user = user;
   next();
 });
 
@@ -72,7 +56,6 @@ const protectAccountOwner = catchAsync(async (req, res, next) => {
 });
 
 module.exports = {
-  adminExists,
   protectTokenAdmin,
   protectAccountOwner,
 };

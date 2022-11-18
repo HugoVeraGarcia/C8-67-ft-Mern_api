@@ -40,7 +40,7 @@ const Enterprise = db.define('enterprise', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  legalreprename: {
+  legalreprefirstname: {
     type: DataTypes.STRING,
     allowNull: false,
   },

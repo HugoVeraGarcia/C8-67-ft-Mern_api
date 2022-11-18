@@ -5,7 +5,6 @@ const dotenv = require('dotenv');
 const { AppError } = require('../utils/appError');
 
 const { User } = require('../models/user.model');
-const { Admin } = require('../models/admin.model');
 const { Product } = require('../models/product.model');
 const { Order } = require('../models/order.model');
 const { Cart } = require('../models/cart.model');

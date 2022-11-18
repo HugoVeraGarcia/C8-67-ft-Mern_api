@@ -10,7 +10,11 @@ const userEnterprise = db.define('userEnterprise', {
     allowNull: false,
     type: DataTypes.INTEGER,
   },
-  username: {
+  firstname: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  lastname: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -18,6 +22,9 @@ const userEnterprise = db.define('userEnterprise', {
     type: DataTypes.STRING,
     unique: true,
     allowNull: false,
+  },
+  phone: {
+    type: DataTypes.STRING,
   },
   password: {
     type: DataTypes.STRING,

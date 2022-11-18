@@ -8,7 +8,6 @@ const { ProductImg } = require('./productImg.model');
 const { Category } = require('./category.model');
 const { Enterprise } = require('./enterprise.model');
 const { userEnterprise } = require('./userEnterprise.model');
-const { Admin } = require('./admin.model');
 
 const initModels = () => {
   // one user <–—> many product

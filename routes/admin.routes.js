@@ -3,45 +3,47 @@ const { body } = require('express-validator');
 
 //middleware
 const {
-  protectTokenAdmin,
-  adminExists,
-} = require('../middlewares/admin.middlewares');
+  isSuper,
+  userExists,
+  userDeletedExists,
+  protectToken,
+} = require('../middlewares/usersenterprises.middlewares');
 
+// data validatos
 const {
-  createUserValidations,
-  createAdminValidations,
+  createUserEnterpriseValidations,
   checkValidations,
-  loginValidations,
 } = require('../middlewares/validations.middlewares');
 
 //import controller functions
 const {
-  createUserAdmin,
-  login,
-  deleteAdmin,
-  activateAdmin,
-  getAllAdmin,
-} = require('../controllers/admin.controller');
+  createSuper,
+  deleteUserEnterprise,
+  activeUserEnterprise,
+  getAllSuper,
+} = require('../controllers/userenterprise.controller');
 
 //router declaration
 const router = express.Router();
 
-//create admin
-router.post('/', createAdminValidations, checkValidations, createUserAdmin);
-
-// login admin
-router.post('/login', loginValidations, checkValidations, login);
+//create super pendiente con token y isSuper
+router.post(
+  '/',
+  createUserEnterpriseValidations,
+  checkValidations,
+  createSuper
+);
 
 // Apply protectToken middleware
-router.use(protectTokenAdmin);
+router.use(protectToken);
 
-// get all superusers admin
-router.get('/', getAllAdmin);
+// get all superusers
+router.get('/', isSuper, getAllSuper);
 
-// activate admin
-router.patch('/:id', activateAdmin);
+// activate super
+router.patch('/:id', isSuper, userDeletedExists, activeUserEnterprise);
 
-// delete admin
-router.delete('/:id', adminExists, deleteAdmin);
+// delete super
+router.delete('/:id', isSuper, userExists, deleteUserEnterprise);
 
 module.exports = { adminRouter: router };

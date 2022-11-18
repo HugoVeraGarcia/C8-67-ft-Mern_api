@@ -6,8 +6,8 @@ const { Enterprise } = require('../models/enterprise.model');
 const { catchAsync } = require('../utils/catchAsync');
 const { AppError } = require('../utils/appError');
 
-//isUserEnterpriseAdmin
-const isUserEnterpriseAdmin = catchAsync(async (req, res, next) => {
+//is Admin   isUserEnterpriseAdmin
+const isSuperAdmin = catchAsync(async (req, res, next) => {
   let token;
 
   // Extract token from headers
@@ -18,18 +18,41 @@ const isUserEnterpriseAdmin = catchAsync(async (req, res, next) => {
   const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
   // decoded returns -> { id: 1, iat: 1651713776, exp: 1651717376 }
-  const userAdmin = await userEnterprise.findOne({
+  const user = await userEnterprise.findOne({
     where: { id: decoded.id, status: 'active' },
   });
 
-  if (userAdmin.role !== 'admin') {
-    return next(new AppError('User has not a admin role', 400));
+  if (!(user.role === 'admin' || user.role === 'super')) {
+    return next(new AppError('User has not permission', 400));
   }
 
   next();
 });
 
-const protectTokenUserEnterprise = catchAsync(async (req, res, next) => {
+// superuser
+const isSuper = catchAsync(async (req, res, next) => {
+  let token;
+
+  // Extract token from headers
+  // ['Bearer', 'token']
+  token = req.headers.authorization.split(' ')[1];
+
+  // Validate token
+  const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+
+  // decoded returns -> { id: 1, iat: 1651713776, exp: 1651717376 }
+  const user = await userEnterprise.findOne({
+    where: { id: decoded.id, status: 'active' },
+  });
+
+  if (user.role !== 'super') {
+    return next(new AppError('User has not a super role', 400));
+  }
+
+  next();
+});
+
+const protectToken = catchAsync(async (req, res, next) => {
   let token;
 
   // Extract token from headers
@@ -47,7 +70,6 @@ const protectTokenUserEnterprise = catchAsync(async (req, res, next) => {
 
   // Validate token
   const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-  //console.log(decoded);
 
   // decoded returns -> { id: 1, iat: 1651713776, exp: 1651717376 }
   const user = await userEnterprise.findOne({
@@ -64,7 +86,7 @@ const protectTokenUserEnterprise = catchAsync(async (req, res, next) => {
   next();
 });
 
-const userEnterpriseExists = catchAsync(async (req, res, next) => {
+const userExists = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
   const user = await userEnterprise.findOne({
@@ -82,7 +104,7 @@ const userEnterpriseExists = catchAsync(async (req, res, next) => {
   next();
 });
 
-const userEnterpriseExistsUpdate = catchAsync(async (req, res, next) => {
+const userExistsParams = catchAsync(async (req, res, next) => {
   const { id } = req.body;
 
   const user = await userEnterprise.findOne({
@@ -99,7 +121,7 @@ const userEnterpriseExistsUpdate = catchAsync(async (req, res, next) => {
   next();
 });
 
-const enterpriseExists = catchAsync(async (req, res, next) => {
+const enterpriseExistsParams = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
   const enterprise = await Enterprise.findOne({
@@ -116,7 +138,24 @@ const enterpriseExists = catchAsync(async (req, res, next) => {
   next();
 });
 
-const userDeletedEnterpriseExists = catchAsync(async (req, res, next) => {
+const enterpriseExists = catchAsync(async (req, res, next) => {
+  const { id } = req.body;
+
+  const enterprise = await Enterprise.findOne({
+    where: { id, status: 'active' },
+    //attributes: { exclude: ['password'] },
+  });
+
+  if (!enterprise) {
+    return next(new AppError(`User not found given that id: ${id}`, 404));
+  }
+
+  // Add user data to the req object
+  req.enterprise = enterprise;
+  next();
+});
+
+const userDeletedExists = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
   const user = await userEnterprise.findOne({
@@ -166,12 +205,14 @@ const protectAccountOwner = catchAsync(async (req, res, next) => {
 });
 
 module.exports = {
-  userEnterpriseExists,
-  enterpriseExists,
-  protectTokenUserEnterprise,
-  protectAccountOwner,
   enterpriseDeletedExists,
-  userEnterpriseExistsUpdate,
-  userDeletedEnterpriseExists,
-  isUserEnterpriseAdmin,
+  enterpriseExists,
+  isSuper,
+  isSuperAdmin,
+  userDeletedExists,
+  userExists,
+  protectToken,
+  //protectAccountOwner,
+  userExistsParams,
+  enterpriseExistsParams,
 };

@@ -10,11 +10,11 @@ const morgan = require('morgan');
 const { globalErrorHandler } = require('./controllers/errors.controller');
 
 //Routers to endpoints
-const { usersRouter } = require('./routes/users.routes');
+//const { usersRouter } = require('./routes/users.routes');
 const { adminRouter } = require('./routes/admin.routes');
 const { productsRouter } = require('./routes/products.routes');
 const { cartsRouter } = require('./routes/carts.routes');
-const {userEnterpriseRouter } = require('./routes/usersenterprise.routes');
+const {userEnterpriseRouter } = require('./routes/usersEnterprise.routes');
 
 const { db } = require('./utils/database');
 
@@ -49,7 +49,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 //  Endpoints & routers
-app.use('/api/v1/users', usersRouter);
+//app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/admin', adminRouter);
 app.use('/api/v1/products', productsRouter);
 app.use('/api/v1/carts', cartsRouter);

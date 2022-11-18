@@ -36,7 +36,7 @@ router.get('/', getAllProducts);
 router.get('/:id', productExist, getProductById);
 
 // Apply protectToken middleware
-router.use(protectToken);
+//router.use(protectToken);
 
 router.post('/', createProductValidations, checkValidations, createProduct);
 

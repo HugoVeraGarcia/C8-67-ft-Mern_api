@@ -51,12 +51,22 @@ const getAllEnterprise = catchAsync(async (req, res, next) => {
   });
 });
 
+const getAllSuper = catchAsync(async (req, res, next) => {
+  const superUser = await userEnterprise.findAll({
+    where: { status: 'active', role: 'super' },
+    attributes: { exclude: ['password'] },
+    order: [['id', 'Asc']],
+  });
+  res.status(200).json({
+    superUser,
+  });
+});
+
 const getIdEnterpriseByUser = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const user = await userEnterprise.findOne({
     where: { status: 'active', id },
     attributes: { exclude: ['password'] },
-    //order: [['id', 'Asc']],
   });
 
   const identerpriseid = user.enterpriseId;
@@ -125,15 +135,18 @@ const activateEnterprise = catchAsync(async (req, res, next) => {
 });
 
 const createUserEnterprise = catchAsync(async (req, res, next) => {
-  const { username, email, password, role, enterpriseId } = req.body;
+  const { firstname, lastname, email, phone, password, role, enterpriseId } =
+    req.body;
 
   const salt = await bcrypt.genSalt(12);
   const hashPassword = await bcrypt.hash(password, salt);
 
   const user = await userEnterprise.create({
-    username,
+    firstname,
+    lastname,
     email,
     password: hashPassword,
+    phone,
     role,
     enterpriseId,
   });
@@ -147,12 +160,36 @@ const createUserEnterprise = catchAsync(async (req, res, next) => {
   });
 });
 
+const createSuper = catchAsync(async (req, res, next) => {
+  const { firstname, lastname, email, phone, password } = req.body;
+
+  const salt = await bcrypt.genSalt(12);
+  const hashPassword = await bcrypt.hash(password, salt);
+
+  const user = await userEnterprise.create({
+    firstname,
+    lastname,
+    email,
+    password: hashPassword,
+    phone,
+    role: 'super',
+  });
+
+  user.password = undefined;
+
+  res.status(201).json({
+    status: 'Success',
+    message: 'Super User has been created',
+    user,
+  });
+});
+
 const updateUserEnterprise = catchAsync(async (req, res, next) => {
   const { user } = req;
-  console.log('user:::', user);
-  const { username, email, id } = req.body;
 
-  await user.update({ username, email });
+  const { firstname, lastname, email } = req.body;
+
+  await user.update({ firstname, lastname, email });
   res.status(200).json({ status: 'success', user });
 });
 
@@ -241,7 +278,7 @@ const createEnterprise = catchAsync(async (req, res, next) => {
     address,
     typeperson,
     enterpriserfc,
-    legalreprename,
+    legalreprefirstname,
     legalreprelastname,
     reprerfc,
     identityrepre,
@@ -261,7 +298,7 @@ const createEnterprise = catchAsync(async (req, res, next) => {
     address,
     typeperson,
     enterpriserfc,
-    legalreprename,
+    legalreprefirstname,
     legalreprelastname,
     reprerfc,
     identityrepre,
@@ -270,14 +307,17 @@ const createEnterprise = catchAsync(async (req, res, next) => {
   });
 
   const user = await userEnterprise.create({
-    username: legalreprename + '_' + legalreprelastname,
+    firstname: legalreprefirstname,
+    lastname: legalreprelastname,
     email,
+    phone,
     password: hashPassword,
     role: 'admin',
     enterpriseId: enterprise.id,
   });
 
   enterprise.password = undefined;
+  user.password = undefined;
 
   res.status(201).json({
     status: 'Success',
@@ -348,4 +388,6 @@ module.exports = {
   updateEnterprise,
   getUserEnterpriseById,
   getAllUsersEnterpriseById,
+  createSuper,
+  getAllSuper,
 };
